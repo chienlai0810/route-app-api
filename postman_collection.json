@@ -1,0 +1,328 @@
+{
+  "info": {
+    "name": "Route App API",
+    "description": "API Collection for Post Office & Route Management with GIS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "PostOffice",
+      "item": [
+        {
+          "name": "Create PostOffice",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"BC-HN-001\",\n  \"name\": \"Bưu cục Hoàn Kiếm\",\n  \"address\": \"123 Đường Trần Hưng Đạo, Hoàn Kiếm, Hà Nội\",\n  \"phone\": \"024-12345678\",\n  \"location\": {\n    \"type\": \"Point\",\n    \"coordinates\": [105.8516, 21.0285]\n  },\n  \"status\": \"ACTIVE\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/post-offices",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "post-offices"]
+            }
+          }
+        },
+        {
+          "name": "Get All PostOffices",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/post-offices",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "post-offices"]
+            }
+          }
+        },
+        {
+          "name": "Get PostOffice by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/post-offices/{{postOfficeId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "post-offices", "{{postOfficeId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get PostOffice by Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/post-offices/code/BC-HN-001",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "post-offices", "code", "BC-HN-001"]
+            }
+          }
+        },
+        {
+          "name": "Update PostOffice",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"BC-HN-001\",\n  \"name\": \"Bưu cục Hoàn Kiếm - Updated\",\n  \"address\": \"123 Đường Trần Hưng Đạo, Hoàn Kiếm, Hà Nội\",\n  \"phone\": \"024-12345678\",\n  \"location\": {\n    \"type\": \"Point\",\n    \"coordinates\": [105.8516, 21.0285]\n  },\n  \"status\": \"ACTIVE\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/post-offices/{{postOfficeId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "post-offices", "{{postOfficeId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete PostOffice",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/post-offices/{{postOfficeId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "post-offices", "{{postOfficeId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Route",
+      "item": [
+        {
+          "name": "Create Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"TUYEN-HK-01\",\n  \"name\": \"Tuyến Hoàn Kiếm 1\",\n  \"type\": \"DELIVERY\",\n  \"postOfficeId\": \"{{postOfficeId}}\",\n  \"staffMain\": \"Nguyễn Văn A\",\n  \"staffSub\": \"Trần Văn B\",\n  \"area\": {\n    \"type\": \"Polygon\",\n    \"coordinates\": [\n      [\n        [105.8500, 21.0300],\n        [105.8550, 21.0300],\n        [105.8550, 21.0250],\n        [105.8500, 21.0250],\n        [105.8500, 21.0300]\n      ]\n    ]\n  },\n  \"color\": \"#FF5733\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/routes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "routes"]
+            }
+          }
+        },
+        {
+          "name": "Get All Routes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/routes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "routes"]
+            }
+          }
+        },
+        {
+          "name": "Get Routes by PostOffice",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/routes?postOfficeId={{postOfficeId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "routes"],
+              "query": [
+                {
+                  "key": "postOfficeId",
+                  "value": "{{postOfficeId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Routes by Type",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/routes?type=DELIVERY",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "routes"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "DELIVERY"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Route by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/routes/{{routeId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "routes", "{{routeId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Route by Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/routes/code/TUYEN-HK-01",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "routes", "code", "TUYEN-HK-01"]
+            }
+          }
+        },
+        {
+          "name": "Update Route",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"TUYEN-HK-01\",\n  \"name\": \"Tuyến Hoàn Kiếm 1 - Updated\",\n  \"type\": \"BOTH\",\n  \"postOfficeId\": \"{{postOfficeId}}\",\n  \"staffMain\": \"Nguyễn Văn A\",\n  \"staffSub\": \"Trần Văn B\",\n  \"area\": {\n    \"type\": \"Polygon\",\n    \"coordinates\": [\n      [\n        [105.8500, 21.0300],\n        [105.8550, 21.0300],\n        [105.8550, 21.0250],\n        [105.8500, 21.0250],\n        [105.8500, 21.0300]\n      ]\n    ]\n  },\n  \"color\": \"#3498DB\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/routes/{{routeId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "routes", "{{routeId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Route",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/routes/{{routeId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "routes", "{{routeId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "GIS",
+      "item": [
+        {
+          "name": "Check Point in Polygon (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"latitude\": 21.0275,\n  \"longitude\": 105.8525\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/gis/check-point",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "gis", "check-point"]
+            }
+          }
+        },
+        {
+          "name": "Check Point in Polygon (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/gis/check-point?latitude=21.0275&longitude=105.8525",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "gis", "check-point"],
+              "query": [
+                {
+                  "key": "latitude",
+                  "value": "21.0275"
+                },
+                {
+                  "key": "longitude",
+                  "value": "105.8525"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "postOfficeId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "routeId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
+
