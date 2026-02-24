@@ -22,6 +22,7 @@ public class RouteResponse {
     private String code;
     private String name;
     private Route.RouteType type;
+    private Route.ProductType productType;
     private String postOfficeId;
     private String postOfficeName; // Thêm tên bưu cục để tiện hiển thị
     private String staffMain;

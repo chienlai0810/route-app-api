@@ -20,14 +20,17 @@ import lombok.NoArgsConstructor;
 public class RouteRequest {
 
     @NotBlank(message = "Code is required")
-    @Pattern(regexp = "^[A-Z0-9_-]+$", message = "Code must contain only uppercase letters, numbers, underscore and dash")
+//    @Pattern(regexp = "^[A-Z0-9_-]+$", message = "Code must contain only uppercase letters, numbers, underscore and dash")
     private String code;
 
     @NotBlank(message = "Name is required")
     private String name;
 
-    @NotNull(message = "Type is required")
+    @NotNull(message = "Route type is required")
     private Route.RouteType type;
+
+    @NotNull(message = "Product type is required")
+    private Route.ProductType productType;
 
     private String staffMain;
 

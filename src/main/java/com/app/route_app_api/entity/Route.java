@@ -27,7 +27,9 @@ public class Route {
 
     private String name; // Tên tuyến
 
-    private RouteType type; // DELIVERY, PICKUP, BOTH
+    private RouteType type; // DELIVERY, PICKUP, ALL
+
+    private ProductType productType; // Loại hàng hóa
 
     private String staffMain; // Nhân viên chính
 
@@ -42,7 +44,13 @@ public class Route {
     public enum RouteType {
         DELIVERY,   // Chỉ giao hàng
         PICKUP,     // Chỉ nhận hàng
-        BOTH        // Cả giao và nhận
+        ALL        // Cả giao và nhận
+    }
+
+    public enum ProductType {
+        HH,
+        KH,
+        TH
     }
 }
 

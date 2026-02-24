@@ -49,6 +49,7 @@ public class RouteService {
                 .code(request.getCode())
                 .name(request.getName())
                 .type(request.getType())
+                .productType(request.getProductType())
                 .staffMain(request.getStaffMain())
                 .staffSub(request.getStaffSub())
                 .area(request.getArea())
@@ -128,6 +129,7 @@ public class RouteService {
         route.setCode(request.getCode());
         route.setName(request.getName());
         route.setType(request.getType());
+        route.setProductType(request.getProductType());
         route.setStaffMain(request.getStaffMain());
         route.setStaffSub(request.getStaffSub());
         route.setArea(request.getArea());
@@ -204,6 +206,7 @@ public class RouteService {
                 .code(route.getCode())
                 .name(route.getName())
                 .type(route.getType())
+                .productType(route.getProductType())
                 .staffMain(route.getStaffMain())
                 .staffSub(route.getStaffSub())
                 .area(route.getArea())
