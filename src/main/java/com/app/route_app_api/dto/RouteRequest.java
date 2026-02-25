@@ -4,7 +4,6 @@ import com.app.route_app_api.entity.Route;
 import com.app.route_app_api.model.GeoJsonPolygon;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,8 +28,8 @@ public class RouteRequest {
     @NotNull(message = "Route type is required")
     private Route.RouteType type;
 
-    @NotNull(message = "Product type is required")
-    private Route.ProductType productType;
+    @NotBlank(message = "Product type is required")
+    private String productType; // Có thể chứa nhiều giá trị cách nhau bởi dấu ;, ví dụ: HH;TH
 
     private String staffMain;
 

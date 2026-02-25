@@ -29,7 +29,7 @@ public class Route {
 
     private RouteType type; // DELIVERY, PICKUP, ALL
 
-    private ProductType productType; // Loại hàng hóa
+    private String productType; // Loại hàng hóa (có thể nhiều giá trị cách nhau bởi dấu ;, ví dụ: HH;TH)
 
     private String staffMain; // Nhân viên chính
 
