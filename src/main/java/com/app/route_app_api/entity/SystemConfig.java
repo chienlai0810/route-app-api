@@ -1,0 +1,38 @@
+package com.app.route_app_api.entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+
+@Document(collection = "system_config")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class SystemConfig {
+
+    @Id
+    private String id;
+
+    // Ngưỡng cảnh báo khi tuyến chồng lấn
+    private Double antiConflictThreshold;
+
+    // Đơn vị của ngưỡng (%, m, km)
+    private String antiConflictUnit;
+
+    // Màu sắc cho từng loại tuyến
+    private Map<String, String> routeColors;
+
+    // Thời gian cập nhật cuối
+    private LocalDateTime lastUpdated;
+
+    // Người cập nhật cuối
+    private String updatedBy;
+}
+

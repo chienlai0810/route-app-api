@@ -1,3 +1,4 @@
+- ✅ **Route Classification** - DELIVERY, PICKUP, or BOTH
 # Route App API - Post Office & Route Management System with GIS
 
 🚀 **Production-ready Backend API** built with Java Spring Boot + MongoDB for managing post offices and delivery/pickup routes with full GIS (Geographic Information System) support.
@@ -18,7 +19,6 @@
 ### Core Features
 - ✅ **CRUD Operations** for Post Offices (Bưu cục)
 - ✅ **CRUD Operations** for Routes (Tuyến giao/nhận hàng)
-- ✅ **GIS Integration** with MongoDB 2dsphere indexes
 - ✅ **Point-in-Polygon Detection** - determine which route/post office a coordinate belongs to
 - ✅ **Route Overlap Validation** - prevent routes from overlapping beyond threshold (5%)
 - ✅ **Route Classification** - DELIVERY, PICKUP, or BOTH

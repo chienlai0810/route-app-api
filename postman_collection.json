@@ -310,6 +310,62 @@
           }
         }
       ]
+    },
+    {
+      "name": "SystemConfig",
+      "item": [
+        {
+          "name": "Get Current Config",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/system-config",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "system-config"]
+            }
+          }
+        },
+        {
+          "name": "Update Config",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"antiConflictThreshold\": 9.2,\n  \"antiConflictUnit\": \"%\",\n  \"routeColors\": {\n    \"GIAO_HANG\": \"#28a745\",\n    \"NHAN_HANG\": \"#fd7e14\",\n    \"TAT_CA\": \"#17a2b8\",\n    \"XEM_TRUOC_GIAO_HANG\": \"#28a745\",\n    \"XEM_TRUOC_NHAN_HANG\": \"#fd7e14\",\n    \"XEM_TRUOC_TAT_CA\": \"#17a2b8\"\n  },\n  \"updatedBy\": \"admin\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/system-config",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "system-config"]
+            }
+          }
+        },
+        {
+          "name": "Reset Config to Default",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/system-config/reset",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "system-config", "reset"]
+            }
+          }
+        }
+      ]
     }
   ],
   "variable": [
