@@ -23,10 +23,11 @@ public class CorsConfig {
         config.setAllowCredentials(true);
 
         // Allow React frontend origins
-        config.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3001",
-                "https://route-navigator.vercel.app"
-        ));
+//        config.setAllowedOrigins(Arrays.asList(
+//                "http://localhost:3001",
+//                "https://route-navigator.vercel.app"
+//        ));
+        config.setAllowedOriginPatterns(List.of("*"));
 
         // Allow all HTTP methods
         config.setAllowedMethods(Arrays.asList(
