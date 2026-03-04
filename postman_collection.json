@@ -127,7 +127,30 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"code\": \"TUYEN-HK-01\",\n  \"name\": \"Tuyến Hoàn Kiếm 1\",\n  \"type\": \"DELIVERY\",\n  \"postOfficeId\": \"{{postOfficeId}}\",\n  \"staffMain\": \"Nguyễn Văn A\",\n  \"staffSub\": \"Trần Văn B\",\n  \"area\": {\n    \"type\": \"Polygon\",\n    \"coordinates\": [\n      [\n        [105.8500, 21.0300],\n        [105.8550, 21.0300],\n        [105.8550, 21.0250],\n        [105.8500, 21.0250],\n        [105.8500, 21.0300]\n      ]\n    ]\n  },\n  \"color\": \"#FF5733\"\n}"
+              "raw": "{\n  \"code\": \"ROUTE001\",\n  \"name\": \"Tuyến Quận 1 - Giao hàng HH/TH\",\n  \"type\": \"DELIVERY\",\n  \"productType\": \"HH;TH\",\n  \"color\": \"#FF5733\",\n  \"staffMain\": \"staff001\",\n  \"staffSub\": \"staff002\",\n  \"area\": {\n    \"type\": \"Polygon\",\n    \"coordinates\": [\n      [\n        [106.6909, 10.7769],\n        [106.7009, 10.7769],\n        [106.7009, 10.7869],\n        [106.6909, 10.7869],\n        [106.6909, 10.7769]\n      ]\n    ]\n  }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/routes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "routes"]
+            }
+          }
+        },
+        {
+          "name": "Create Route 2 (KH)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"ROUTE002\",\n  \"name\": \"Tuyến Quận 2 - Nhận hàng KH\",\n  \"type\": \"PICKUP\",\n  \"productType\": \"KH\",\n  \"color\": \"#33FF57\",\n  \"staffMain\": \"staff003\",\n  \"staffSub\": \"staff004\",\n  \"area\": {\n    \"type\": \"Polygon\",\n    \"coordinates\": [\n      [\n        [106.7009, 10.7769],\n        [106.7109, 10.7769],\n        [106.7109, 10.7869],\n        [106.7009, 10.7869],\n        [106.7009, 10.7769]\n      ]\n    ]\n  }\n}"
             },
             "url": {
               "raw": "http://localhost:8080/api/v1/routes",
@@ -274,7 +297,30 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"latitude\": 21.0275,\n  \"longitude\": 105.8525\n}"
+              "raw": "{\n  \"latitude\": 10.7819,\n  \"longitude\": 106.6959\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/gis/check-point",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "gis", "check-point"]
+            }
+          }
+        },
+        {
+          "name": "Check Point with ProductType (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"latitude\": 10.7819,\n  \"longitude\": 106.6959,\n  \"productType\": \"HH\"\n}"
             },
             "url": {
               "raw": "http://localhost:8080/api/v1/gis/check-point",
@@ -291,7 +337,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/api/v1/gis/check-point?latitude=21.0275&longitude=105.8525",
+              "raw": "http://localhost:8080/api/v1/gis/check-point?latitude=10.7819&longitude=106.6959",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8080",
@@ -299,11 +345,39 @@
               "query": [
                 {
                   "key": "latitude",
-                  "value": "21.0275"
+                  "value": "10.7819"
                 },
                 {
                   "key": "longitude",
-                  "value": "105.8525"
+                  "value": "106.6959"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Check Point with ProductType (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/gis/check-point?latitude=10.7819&longitude=106.6959&productType=HH",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "gis", "check-point"],
+              "query": [
+                {
+                  "key": "latitude",
+                  "value": "10.7819"
+                },
+                {
+                  "key": "longitude",
+                  "value": "106.6959"
+                },
+                {
+                  "key": "productType",
+                  "value": "HH"
                 }
               ]
             }

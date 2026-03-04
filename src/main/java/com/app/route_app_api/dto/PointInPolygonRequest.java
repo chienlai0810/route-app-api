@@ -20,5 +20,7 @@ public class PointInPolygonRequest {
 
     @NotNull(message = "Longitude is required")
     private Double longitude;
+
+    private String productType; // Loại hàng hóa (HH, KH, TH) - optional filter
 }
 

@@ -31,6 +31,7 @@ public class PointInPolygonResponse {
         private String code;
         private String name;
         private String type;
+        private String productType;
         private String color;
     }
 

@@ -30,16 +30,31 @@ public class GisService {
      * Check which routes contain the given point
      */
     public PointInPolygonResponse checkPointInPolygon(double latitude, double longitude) {
-        log.info("Checking point ({}, {}) in polygon", latitude, longitude);
+        return checkPointInPolygon(latitude, longitude, null);
+    }
+
+    /**
+     * Check which routes contain the given point with optional product type filter
+     */
+    public PointInPolygonResponse checkPointInPolygon(double latitude, double longitude, String productType) {
+        log.info("Checking point ({}, {}) in polygon with productType: {}", latitude, longitude, productType);
 
         // Create GeoJSON point for MongoDB query
         GeoJsonPoint point = new GeoJsonPoint(longitude, latitude);
 
-        // Find routes that contain this point
-        // MongoDB $geoIntersects operator checks if point is within polygon
-        Query query = new Query(
-            Criteria.where("area").intersects(point)
-        );
+        // Build query criteria
+        Criteria criteria = Criteria.where("area").intersects(point);
+
+        // Add product type filter if specified
+        if (productType != null && !productType.trim().isEmpty()) {
+            // Check if productType contains the specified type (handle semicolon-separated values)
+            // Use word boundary or semicolon to match exact product type
+            // Pattern: (^|;)HH(;|$) matches HH at start, end, or between semicolons
+            String pattern = "(^|;)" + productType.trim() + "(;|$)";
+            criteria = criteria.and("productType").regex(pattern, "i");
+        }
+
+        Query query = new Query(criteria);
 
         List<Route> matchingRoutes = mongoTemplate.find(query, Route.class);
 
@@ -61,6 +76,7 @@ public class GisService {
                         .code(route.getCode())
                         .name(route.getName())
                         .type(route.getType().name())
+                        .productType(route.getProductType())
                         .build())
                 .collect(Collectors.toList());
 

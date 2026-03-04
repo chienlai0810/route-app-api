@@ -24,12 +24,13 @@ public class GisController {
     @PostMapping("/check-point")
     public ResponseEntity<ApiResponse<PointInPolygonResponse>> checkPointInPolygon(
             @Valid @RequestBody PointInPolygonRequest request) {
-        log.info("POST /api/v1/gis/check-point - Checking point ({}, {})",
-                request.getLatitude(), request.getLongitude());
+        log.info("POST /api/v1/gis/check-point - Checking point ({}, {}) with productType: {}",
+                request.getLatitude(), request.getLongitude(), request.getProductType());
 
         PointInPolygonResponse response = gisService.checkPointInPolygon(
                 request.getLatitude(),
-                request.getLongitude()
+                request.getLongitude(),
+                request.getProductType()
         );
 
         String message = response.isFound()
@@ -42,10 +43,12 @@ public class GisController {
     @GetMapping("/check-point")
     public ResponseEntity<ApiResponse<PointInPolygonResponse>> checkPointInPolygonGet(
             @RequestParam Double latitude,
-            @RequestParam Double longitude) {
-        log.info("GET /api/v1/gis/check-point - Checking point ({}, {})", latitude, longitude);
+            @RequestParam Double longitude,
+            @RequestParam(required = false) String productType) {
+        log.info("GET /api/v1/gis/check-point - Checking point ({}, {}) with productType: {}",
+                latitude, longitude, productType);
 
-        PointInPolygonResponse response = gisService.checkPointInPolygon(latitude, longitude);
+        PointInPolygonResponse response = gisService.checkPointInPolygon(latitude, longitude, productType);
 
         String message = response.isFound()
                 ? "Point is within " + response.getMatchingRoutes().size() + " route(s)"
