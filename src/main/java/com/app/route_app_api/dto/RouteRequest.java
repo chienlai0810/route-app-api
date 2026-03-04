@@ -1,13 +1,13 @@
 package com.app.route_app_api.dto;
 
 import com.app.route_app_api.entity.Route;
-import com.app.route_app_api.model.GeoJsonPolygon;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 
 /**
  * Route Request DTO
@@ -38,4 +38,6 @@ public class RouteRequest {
     @NotNull(message = "Area is required")
     private GeoJsonPolygon area;
 }
+
+
 

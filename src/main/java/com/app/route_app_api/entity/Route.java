@@ -1,11 +1,11 @@
 package com.app.route_app_api.entity;
 
-import com.app.route_app_api.model.GeoJsonPolygon;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -35,7 +35,7 @@ public class Route {
 
     private String staffSub; // Nhân viên phụ
 
-    private GeoJsonPolygon area; // Khu vực phục vụ (Polygon) (indexed programmatically)
+    private GeoJsonPolygon area; // Khu vực phục vụ (Polygon) - MongoDB GeoJSON format
 
     private LocalDateTime createdAt;
 
@@ -53,4 +53,6 @@ public class Route {
         TH
     }
 }
+
+
 

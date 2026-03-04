@@ -157,7 +157,7 @@ public class RouteService {
      * Validate route overlap with existing routes
      * Throws BusinessRuleException if overlap exceeds threshold
      */
-    private void validateRouteOverlap(com.app.route_app_api.model.GeoJsonPolygon newArea, String excludeRouteId) {
+    private void validateRouteOverlap(org.springframework.data.mongodb.core.geo.GeoJsonPolygon newArea, String excludeRouteId) {
         // Get all routes except the one being updated
         Query query = new Query();
         if (excludeRouteId != null) {
@@ -183,8 +183,8 @@ public class RouteService {
      * This is a simplified calculation - in production, use JTS or similar library
      */
     private double calculateOverlapPercentage(
-            com.app.route_app_api.model.GeoJsonPolygon area1,
-            com.app.route_app_api.model.GeoJsonPolygon area2) {
+            org.springframework.data.mongodb.core.geo.GeoJsonPolygon area1,
+            org.springframework.data.mongodb.core.geo.GeoJsonPolygon area2) {
 
         // Simplified overlap detection
         // In production, use JTS (Java Topology Suite) for accurate polygon intersection

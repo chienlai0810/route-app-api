@@ -1,11 +1,11 @@
 package com.app.route_app_api.dto;
 
 import com.app.route_app_api.entity.Route;
-import com.app.route_app_api.model.GeoJsonPolygon;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 
 import java.time.LocalDateTime;
 
@@ -32,4 +32,6 @@ public class RouteResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
+
+
 

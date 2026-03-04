@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.stereotype.Component;
@@ -94,13 +95,10 @@ public class MongoIndexInitializer {
             // Create unique index on code
             indexOps.ensureIndex(new Index().on("code", Sort.Direction.ASC).unique().named("code_unique"));
 
-//            // Create index on postOfficeId for faster lookups
-//            indexOps.ensureIndex(new Index().on("postOfficeId", Sort.Direction.ASC).named("postOfficeId_index"));
-//
-//            // Create 2dsphere index on area for geospatial queries (Point-in-Polygon)
-//            indexOps.ensureIndex(new GeospatialIndex("area").named("area_2dsphere"));
+            // Create 2dsphere index on area for geospatial queries (Point-in-Polygon)
+            indexOps.ensureIndex(new GeospatialIndex("area").typed(GeoSpatialIndexType.GEO_2DSPHERE).named("area_2dsphere"));
 
-            log.info("Route indexes created successfully");
+            log.info("Route indexes created successfully (including 2dsphere index on area)");
         } catch (Exception e) {
             log.error("Failed to create Route indexes: {}", e.getMessage());
             throw e;
