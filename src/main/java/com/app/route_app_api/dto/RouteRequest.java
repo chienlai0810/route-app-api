@@ -25,6 +25,9 @@ public class RouteRequest {
     @NotBlank(message = "Name is required")
     private String name;
 
+    @NotBlank(message = "Post office ID is required")
+    private String postOfficeId;
+
     @NotNull(message = "Route type is required")
     private Route.RouteType type;
 
@@ -34,6 +37,8 @@ public class RouteRequest {
     private String staffMain;
 
     private String staffSub;
+
+    private String color; // Màu sắc để highlight tuyến (hex color code, ví dụ: #FF5733)
 
     @NotNull(message = "Area is required")
     private GeoJsonPolygon area;

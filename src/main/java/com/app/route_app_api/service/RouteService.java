@@ -2,10 +2,12 @@ package com.app.route_app_api.service;
 
 import com.app.route_app_api.dto.RouteRequest;
 import com.app.route_app_api.dto.RouteResponse;
+import com.app.route_app_api.entity.PostOffice;
 import com.app.route_app_api.entity.Route;
 import com.app.route_app_api.exception.BusinessRuleException;
 import com.app.route_app_api.exception.DuplicateResourceException;
 import com.app.route_app_api.exception.ResourceNotFoundException;
+import com.app.route_app_api.repository.PostOfficeRepository;
 import com.app.route_app_api.repository.RouteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 public class RouteService {
 
     private final RouteRepository routeRepository;
+    private final PostOfficeRepository postOfficeRepository;
     private final MongoTemplate mongoTemplate;
 
     // Ngưỡng chồng lấn cho phép (5%)
@@ -42,16 +45,22 @@ public class RouteService {
             throw new DuplicateResourceException("Route with code " + request.getCode() + " already exists");
         }
 
+        // Validate post office exists
+        PostOffice postOffice = postOfficeRepository.findById(request.getPostOfficeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Post office not found with id: " + request.getPostOfficeId()));
+
         // Check for route overlap
         validateRouteOverlap(request.getArea(), null);
 
         Route route = Route.builder()
                 .code(request.getCode())
                 .name(request.getName())
+                .postOfficeId(request.getPostOfficeId())
                 .type(request.getType())
                 .productType(request.getProductType())
                 .staffMain(request.getStaffMain())
                 .staffSub(request.getStaffSub())
+                .color(request.getColor())
                 .area(request.getArea())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
@@ -110,6 +119,23 @@ public class RouteService {
                 .collect(Collectors.toList());
     }
 
+    public List<RouteResponse> getRoutesByPostOfficeId(String postOfficeId) {
+        log.info("Getting routes by post office id: {}", postOfficeId);
+
+        // Validate post office exists
+        if (!postOfficeRepository.existsById(postOfficeId)) {
+            throw new ResourceNotFoundException("Post office not found with id: " + postOfficeId);
+        }
+
+        List<Route> routes = routeRepository.findAll().stream()
+                .filter(route -> postOfficeId.equals(route.getPostOfficeId()))
+                .collect(Collectors.toList());
+
+        return routes.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public RouteResponse updateRoute(String id, RouteRequest request) {
         log.info("Updating route with id: {}", id);
@@ -123,15 +149,21 @@ public class RouteService {
             throw new DuplicateResourceException("Route with code " + request.getCode() + " already exists");
         }
 
+        // Validate post office exists
+        PostOffice postOffice = postOfficeRepository.findById(request.getPostOfficeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Post office not found with id: " + request.getPostOfficeId()));
+
         // Check for route overlap (excluding current route)
         validateRouteOverlap(request.getArea(), id);
 
         route.setCode(request.getCode());
         route.setName(request.getName());
+        route.setPostOfficeId(request.getPostOfficeId());
         route.setType(request.getType());
         route.setProductType(request.getProductType());
         route.setStaffMain(request.getStaffMain());
         route.setStaffSub(request.getStaffSub());
+        route.setColor(request.getColor());
         route.setArea(request.getArea());
         route.setUpdatedAt(LocalDateTime.now());
 
@@ -201,14 +233,24 @@ public class RouteService {
     }
 
     private RouteResponse mapToResponse(Route route) {
+        String postOfficeName = null;
+        if (route.getPostOfficeId() != null) {
+            postOfficeName = postOfficeRepository.findById(route.getPostOfficeId())
+                    .map(PostOffice::getName)
+                    .orElse(null);
+        }
+
         return RouteResponse.builder()
                 .id(route.getId())
                 .code(route.getCode())
                 .name(route.getName())
+                .postOfficeId(route.getPostOfficeId())
+                .postOfficeName(postOfficeName)
                 .type(route.getType())
                 .productType(route.getProductType())
                 .staffMain(route.getStaffMain())
                 .staffSub(route.getStaffSub())
+                .color(route.getColor())
                 .area(route.getArea())
                 .createdAt(route.getCreatedAt())
                 .updatedAt(route.getUpdatedAt())

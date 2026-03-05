@@ -27,6 +27,8 @@ public class Route {
 
     private String name; // Tên tuyến
 
+    private String postOfficeId; // ID của bưu cục quản lý tuyến này
+
     private RouteType type; // DELIVERY, PICKUP, ALL
 
     private String productType; // Loại hàng hóa (có thể nhiều giá trị cách nhau bởi dấu ;, ví dụ: HH;TH)
@@ -34,6 +36,8 @@ public class Route {
     private String staffMain; // Nhân viên chính
 
     private String staffSub; // Nhân viên phụ
+
+    private String color; // Màu sắc để highlight tuyến trên bản đồ (hex color code, ví dụ: #FF5733)
 
     private GeoJsonPolygon area; // Khu vực phục vụ (Polygon) - MongoDB GeoJSON format
 

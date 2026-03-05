@@ -77,6 +77,7 @@ public class GisService {
                         .name(route.getName())
                         .type(route.getType().name())
                         .productType(route.getProductType())
+                        .color(route.getColor())
                         .build())
                 .collect(Collectors.toList());
 
