@@ -46,10 +46,17 @@ public class DataSeedService {
      * @param force - true để xóa dữ liệu cũ và tạo mới
      */
     public String seedData(boolean force) {
-        // Check if post offices exist
+        if (force) {
+            log.info("Clearing existing data...");
+            routeRepository.deleteAll();
+            postOfficeRepository.deleteAll();
+        }
+
+        // Check if post offices exist, if not seed them
         List<PostOffice> postOffices = postOfficeRepository.findAll();
         if (postOffices.isEmpty()) {
-            return "No post offices found. Please create post offices first.";
+            log.info("No post offices found. Seeding post offices...");
+            postOffices = seedPostOffices();
         }
 
         // Check if routes already exist
@@ -57,10 +64,6 @@ public class DataSeedService {
             return "Database already contains routes. Use force=true to override.";
         }
 
-        if (force) {
-            log.info("Clearing existing routes...");
-            routeRepository.deleteAll();
-        }
 
         // Seed Routes for each Post Office
         int totalRoutes = 0;
@@ -93,32 +96,87 @@ public class DataSeedService {
         log.info("All routes cleared");
     }
 
+    /**
+     * Seed Post Offices ở các vị trí cách xa nhau để tránh chồng lấn tuyến
+     * Mỗi bưu cục cách nhau ít nhất 0.1 độ (~10km) để đảm bảo vùng phủ 200 tuyến không chồng lấn
+     */
+    private List<PostOffice> seedPostOffices() {
+        List<PostOffice> postOffices = new ArrayList<>();
+
+        // Tọa độ trung tâm Hà Nội
+        double baseLatitude = 21.028511;
+        double baseLongitude = 105.804817;
+
+        // Khoảng cách giữa các bưu cục: 0.1 độ (~10km)
+        // Điều này đảm bảo vùng phủ của mỗi bưu cục (6km x 2km) không chồng lấn
+        double spacing = 0.1;
+
+        // Tạo 50 bưu cục trong lưới 7x8 (để phân bố đều)
+        int cols = 8; // Số cột
+        int rows = 7; // Số hàng (7x8 = 56, chỉ lấy 50)
+
+        for (int i = 1; i <= 50; i++) {
+            int row = (i - 1) / cols;
+            int col = (i - 1) % cols;
+
+            // Tính offset từ trung tâm để phân bố đều
+            double lngOffset = (col - cols / 2.0) * spacing;
+            double latOffset = (row - rows / 2.0) * spacing;
+
+            String code = String.format("BC-%02d", i);
+            String name = String.valueOf(i);
+
+            GeoJsonPoint location = new GeoJsonPoint(
+                baseLongitude + lngOffset,
+                baseLatitude + latOffset
+            );
+
+            PostOffice postOffice = PostOffice.builder()
+                    .code(code)
+                    .name(name)
+                    .address("Địa chỉ bưu cục " + i)
+                    .location(location)
+                    .phone("024-" + (38000000 + random.nextInt(10000)))
+                    .status("ACTIVE")
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .build();
+
+            postOffices.add(postOfficeRepository.save(postOffice));
+            log.info("Created post office: {} at ({}, {})",
+                name, location.getX(), location.getY());
+        }
+
+        return postOffices;
+    }
+
     private List<Route> seedRoutesForPostOffice(PostOffice postOffice) {
         List<Route> routes = new ArrayList<>();
         GeoJsonPoint center = postOffice.getLocation();
         double baseLng = center.getX();
         double baseLat = center.getY();
 
-        // Kích thước mỗi ô polygon (sẽ lấp kín liền nhau)
-        double cellWidth = 0.007;  // Chiều rộng mỗi ô (longitude)
-        double cellHeight = 0.005; // Chiều cao mỗi ô (latitude)
+        // Kích thước mỗi ô polygon (giảm xuống để tránh chồng lấn giữa các bưu cục)
+        // Với 10x20 = 200 ô, tổng vùng phủ: 0.06 lng x 0.02 lat (~6km x 2km)
+        double cellWidth = 0.001;  // Chiều rộng mỗi ô (longitude) - ~300m
+        double cellHeight = 0.001; // Chiều cao mỗi ô (latitude) - ~200m
 
-        // Tạo lưới 4x5 = 20 routes xung quanh bưu cục (lấp kín liền nhau với nhiều hình dạng)
+        // Tạo lưới 10x20 = 200 routes xung quanh bưu cục (lấp kín liền nhau với nhiều hình dạng)
         int routeIndex = 0;
-        for (int row = 0; row < 4; row++) {
-            for (int col = 0; col < 5; col++) {
+        for (int row = 0; row < 10; row++) {
+            for (int col = 0; col < 20; col++) {
                 routeIndex++;
 
                 // Tính toán vị trí góc dưới trái của mỗi ô
-                // Bắt đầu từ góc (-2.5, -2) để tạo lưới đối xứng quanh bưu cục
-                double startLng = baseLng + (col - 2.5) * cellWidth;
-                double startLat = baseLat + (row - 2) * cellHeight;
+                // Bắt đầu từ góc (-10, -5) để tạo lưới đối xứng quanh bưu cục
+                double startLng = baseLng + (col - 10) * cellWidth;
+                double startLat = baseLat + (row - 5) * cellHeight;
 
                 // Tạo polygon với nhiều hình dạng khác nhau nhưng vẫn lấp kín
                 GeoJsonPolygon polygon = createTilingPolygon(startLng, startLat, cellWidth, cellHeight, routeIndex, row, col);
 
                 Route route = Route.builder()
-                        .code(postOffice.getCode() + "-R" + String.format("%02d", routeIndex))
+                        .code(postOffice.getCode() + "-R" + String.format("%03d", routeIndex))
                         .name("Tuyến " + postOffice.getName().replace("Bưu cục ", "") + " - " + routeIndex)
                         .postOfficeId(postOffice.getId())
                         .type(ROUTE_TYPES[random.nextInt(ROUTE_TYPES.length)])
