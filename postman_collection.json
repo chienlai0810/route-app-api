@@ -382,6 +382,96 @@
               ]
             }
           }
+        },
+        {
+          "name": "Check Address (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"Ga Phùng Khoang, Trần Phú, Văn Quán, Hà Đông, Hà Nội\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/gis/check-address",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "gis", "check-address"]
+            }
+          }
+        },
+        {
+          "name": "Check Address with ProductType (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"Ga Phùng Khoang, Trần Phú, Văn Quán, Hà Đông, Hà Nội\",\n  \"productType\": \"HH\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/gis/check-address",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "gis", "check-address"]
+            }
+          }
+        },
+        {
+          "name": "Check Address (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/gis/check-address?address=Ga Phùng Khoang, Trần Phú, Văn Quán, Hà Đông, Hà Nội",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "gis", "check-address"],
+              "query": [
+                {
+                  "key": "address",
+                  "value": "Ga Phùng Khoang, Trần Phú, Văn Quán, Hà Đông, Hà Nội"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Check Address with ProductType (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/gis/check-address?address=Ga Phùng Khoang, Trần Phú, Văn Quán, Hà Đông, Hà Nội&productType=HH",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "gis", "check-address"],
+              "query": [
+                {
+                  "key": "address",
+                  "value": "Ga Phùng Khoang, Trần Phú, Văn Quán, Hà Đông, Hà Nội"
+                },
+                {
+                  "key": "productType",
+                  "value": "HH"
+                }
+              ]
+            }
+          }
         }
       ]
     },
