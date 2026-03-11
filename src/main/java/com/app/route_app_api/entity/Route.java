@@ -29,6 +29,8 @@ public class Route {
 
     private String postOfficeId; // ID của bưu cục quản lý tuyến này
 
+    private String operatingAreaId; // ID của vùng hoạt động (Operating Area) mà tuyến này thuộc về
+
     private RouteType type; // DELIVERY, PICKUP, ALL
 
     private String productType; // Loại hàng hóa (có thể nhiều giá trị cách nhau bởi dấu ;, ví dụ: HH;TH)

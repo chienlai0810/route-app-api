@@ -28,6 +28,9 @@ public class RouteRequest {
     @NotBlank(message = "Post office ID is required")
     private String postOfficeId;
 
+    @NotBlank(message = "Operating area ID is required")
+    private String operatingAreaId;
+
     @NotNull(message = "Route type is required")
     private Route.RouteType type;
 

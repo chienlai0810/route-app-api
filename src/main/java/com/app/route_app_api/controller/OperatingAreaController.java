@@ -46,19 +46,12 @@ public class OperatingAreaController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<OperatingAreaResponse>>> getAllOperatingAreas(
             @RequestParam(required = false) String postOfficeId,
-            @RequestParam(required = false) String productType) {
-        log.info("GET /api/v1/operating-areas - Getting operating areas with filters: postOfficeId={}, productType={}",
-                postOfficeId, productType);
+            @RequestParam(required = false) String productType,
+            @RequestParam(required = false) String operatingAreaId) {
+        log.info("GET /api/v1/operating-areas - Getting operating areas with filters: postOfficeId={}, productType={}, operatingAreaId={}",
+                postOfficeId, productType, operatingAreaId);
 
-        List<OperatingAreaResponse> response;
-
-        if (postOfficeId != null) {
-            response = operatingAreaService.getOperatingAreasByPostOfficeId(postOfficeId);
-        } else if (productType != null) {
-            response = operatingAreaService.getOperatingAreasByProductType(productType);
-        } else {
-            response = operatingAreaService.getAllOperatingAreas();
-        }
+        List<OperatingAreaResponse> response = operatingAreaService.getOperatingAreas(postOfficeId, productType, operatingAreaId);
 
         return ResponseEntity.ok(ApiResponse.success(response));
     }

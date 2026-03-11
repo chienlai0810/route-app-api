@@ -56,21 +56,13 @@ public class RouteController {
     public ResponseEntity<ApiResponse<List<RouteResponse>>> getAllRoutes(
             @RequestParam(required = false) String staffId,
             @RequestParam(required = false) String postOfficeId,
-            @RequestParam(required = false) Route.RouteType type) {
-        log.info("GET /api/v1/routes - Getting routes with filters: staffId={}, postOfficeId={}, type={}",
-                staffId, postOfficeId, type);
+            @RequestParam(required = false) Route.RouteType type,
+            @RequestParam(required = false) String productType,
+            @RequestParam(required = false) String operatingAreaId) {
+        log.info("GET /api/v1/routes - Getting routes with filters: staffId={}, postOfficeId={}, type={}, productType={}, operatingAreaId={}",
+                staffId, postOfficeId, type, productType, operatingAreaId);
 
-        List<RouteResponse> response;
-
-        if (staffId != null) {
-            response = routeService.getRoutesByStaff(staffId);
-        } else if (postOfficeId != null) {
-            response = routeService.getRoutesByPostOfficeId(postOfficeId);
-        } else if (type != null) {
-            response = routeService.getRoutesByType(type);
-        } else {
-            response = routeService.getAllRoutes();
-        }
+        List<RouteResponse> response = routeService.getRoutes(staffId, postOfficeId, type, productType, operatingAreaId);
 
         return ResponseEntity.ok(ApiResponse.success(response));
     }

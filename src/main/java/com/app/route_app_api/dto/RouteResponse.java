@@ -25,6 +25,8 @@ public class RouteResponse {
     private String productType; // Có thể chứa nhiều giá trị cách nhau bởi dấu ;, ví dụ: HH;TH
     private String postOfficeId;
     private String postOfficeName; // Thêm tên bưu cục để tiện hiển thị
+    private String operatingAreaId;
+    private String operatingAreaName; // Thêm tên vùng hoạt động để tiện hiển thị
     private String staffMain;
     private String staffSub;
     private GeoJsonPolygon area;
