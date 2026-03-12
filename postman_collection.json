@@ -113,6 +113,141 @@
       ]
     },
     {
+      "name": "OperatingArea",
+      "item": [
+        {
+          "name": "Create Operating Area",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Vùng Hoạt Động Hoàn Kiếm\",\n  \"postOfficeId\": \"{{postOfficeId}}\",\n  \"productType\": \"HH;TH\",\n  \"area\": {\n    \"type\": \"Polygon\",\n    \"coordinates\": [\n      [\n        [105.8400, 21.0350],\n        [105.8600, 21.0350],\n        [105.8600, 21.0200],\n        [105.8400, 21.0200],\n        [105.8400, 21.0350]\n      ]\n    ]\n  }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/operating-areas",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "operating-areas"]
+            }
+          }
+        },
+        {
+          "name": "Get All Operating Areas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/operating-areas",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "operating-areas"]
+            }
+          }
+        },
+        {
+          "name": "Get Operating Area by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/operating-areas/{{operatingAreaId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "operating-areas", "{{operatingAreaId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Operating Area Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/operating-areas/{{operatingAreaId}}/status",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "operating-areas", "{{operatingAreaId}}", "status"]
+            }
+          }
+        },
+        {
+          "name": "Check Has Routes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/operating-areas/{{operatingAreaId}}/has-routes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "operating-areas", "{{operatingAreaId}}", "has-routes"]
+            }
+          }
+        },
+        {
+          "name": "Get Route Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/operating-areas/{{operatingAreaId}}/route-count",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "operating-areas", "{{operatingAreaId}}", "route-count"]
+            }
+          }
+        },
+        {
+          "name": "Update Operating Area",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Vùng Hoạt Động Hoàn Kiếm Updated\",\n  \"postOfficeId\": \"{{postOfficeId}}\",\n  \"productType\": \"HH;TH;KH\",\n  \"area\": {\n    \"type\": \"Polygon\",\n    \"coordinates\": [\n      [\n        [105.8400, 21.0350],\n        [105.8600, 21.0350],\n        [105.8600, 21.0200],\n        [105.8400, 21.0200],\n        [105.8400, 21.0350]\n      ]\n    ]\n  }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/operating-areas/{{operatingAreaId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "operating-areas", "{{operatingAreaId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Operating Area",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/operating-areas/{{operatingAreaId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "operating-areas", "{{operatingAreaId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "Route",
       "item": [
         {

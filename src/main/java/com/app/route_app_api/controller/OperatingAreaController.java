@@ -3,6 +3,7 @@ package com.app.route_app_api.controller;
 import com.app.route_app_api.dto.ApiResponse;
 import com.app.route_app_api.dto.OperatingAreaRequest;
 import com.app.route_app_api.dto.OperatingAreaResponse;
+import com.app.route_app_api.dto.OperatingAreaStatusResponse;
 import com.app.route_app_api.service.OperatingAreaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +73,41 @@ public class OperatingAreaController {
 
         operatingAreaService.deleteOperatingArea(id);
         return ResponseEntity.ok(ApiResponse.success("Operating area deleted successfully", null));
+    }
+
+    /**
+     * Get operating area status - includes information about routes and permissions
+     * Used by UI to determine if delete/update operations should be enabled
+     */
+    @GetMapping("/{id}/status")
+    public ResponseEntity<ApiResponse<OperatingAreaStatusResponse>> getOperatingAreaStatus(@PathVariable String id) {
+        log.info("GET /api/v1/operating-areas/{}/status - Getting operating area status", id);
+
+        OperatingAreaStatusResponse response = operatingAreaService.getOperatingAreaStatus(id);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /**
+     * Check if operating area has routes
+     * Simple boolean check for quick validation
+     */
+    @GetMapping("/{id}/has-routes")
+    public ResponseEntity<ApiResponse<Boolean>> hasRoutes(@PathVariable String id) {
+        log.info("GET /api/v1/operating-areas/{}/has-routes - Checking if operating area has routes", id);
+
+        boolean hasRoutes = operatingAreaService.hasRoutes(id);
+        return ResponseEntity.ok(ApiResponse.success(hasRoutes));
+    }
+
+    /**
+     * Get route count for operating area
+     */
+    @GetMapping("/{id}/route-count")
+    public ResponseEntity<ApiResponse<Long>> getRouteCount(@PathVariable String id) {
+        log.info("GET /api/v1/operating-areas/{}/route-count - Getting route count", id);
+
+        long count = operatingAreaService.getRouteCount(id);
+        return ResponseEntity.ok(ApiResponse.success(count));
     }
 }
 

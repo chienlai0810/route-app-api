@@ -2,12 +2,14 @@ package com.app.route_app_api.service;
 
 import com.app.route_app_api.dto.OperatingAreaRequest;
 import com.app.route_app_api.dto.OperatingAreaResponse;
+import com.app.route_app_api.dto.OperatingAreaStatusResponse;
 import com.app.route_app_api.entity.OperatingArea;
 import com.app.route_app_api.entity.PostOffice;
 import com.app.route_app_api.exception.BusinessRuleException;
 import com.app.route_app_api.exception.ResourceNotFoundException;
 import com.app.route_app_api.repository.OperatingAreaRepository;
 import com.app.route_app_api.repository.PostOfficeRepository;
+import com.app.route_app_api.repository.RouteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.locationtech.jts.geom.Coordinate;
@@ -37,6 +39,7 @@ public class OperatingAreaService {
 
     private final OperatingAreaRepository operatingAreaRepository;
     private final PostOfficeRepository postOfficeRepository;
+    private final RouteRepository routeRepository;
     private final MongoTemplate mongoTemplate;
 
     @Transactional
@@ -281,6 +284,81 @@ public class OperatingAreaService {
 
         operatingAreaRepository.deleteById(id);
         log.info("Deleted operating area with id: {}", id);
+    }
+
+    /**
+     * Check if an operating area has any routes
+     * Returns true if there are routes using this operating area
+     */
+    public boolean hasRoutes(String operatingAreaId) {
+        log.info("Checking if operating area {} has routes", operatingAreaId);
+
+        // Validate operating area exists
+        if (!operatingAreaRepository.existsById(operatingAreaId)) {
+            throw new ResourceNotFoundException("Operating area not found with id: " + operatingAreaId);
+        }
+
+        boolean hasRoutes = routeRepository.existsByOperatingAreaId(operatingAreaId);
+        log.info("Operating area {} has routes: {}", operatingAreaId, hasRoutes);
+
+        return hasRoutes;
+    }
+
+    /**
+     * Get count of routes in an operating area
+     */
+    public long getRouteCount(String operatingAreaId) {
+        log.info("Getting route count for operating area {}", operatingAreaId);
+
+        // Validate operating area exists
+        if (!operatingAreaRepository.existsById(operatingAreaId)) {
+            throw new ResourceNotFoundException("Operating area not found with id: " + operatingAreaId);
+        }
+
+        long count = routeRepository.findByOperatingAreaId(operatingAreaId).size();
+        log.info("Operating area {} has {} routes", operatingAreaId, count);
+
+        return count;
+    }
+
+    /**
+     * Get operating area status with information about routes and ability to delete/update
+     * This helps UI to enable/disable certain actions
+     */
+    public OperatingAreaStatusResponse getOperatingAreaStatus(String operatingAreaId) {
+        log.info("Getting status for operating area {}", operatingAreaId);
+
+        // Get operating area
+        OperatingArea operatingArea = operatingAreaRepository.findById(operatingAreaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Operating area not found with id: " + operatingAreaId));
+
+        // Check for routes
+        boolean hasRoutes = routeRepository.existsByOperatingAreaId(operatingAreaId);
+        long routeCount = hasRoutes ? routeRepository.findByOperatingAreaId(operatingAreaId).size() : 0;
+
+        // Determine if can delete/update
+        // Usually, if there are routes, deletion might be restricted
+        // Update might still be allowed but with restrictions
+        boolean canDelete = !hasRoutes;
+        boolean canUpdate = !hasRoutes;
+
+        String message;
+        if (hasRoutes) {
+            message = String.format("Operating area contains %d route(s). Deletion is not allowed. " +
+                    "Please remove all routes before deleting this operating area.", routeCount);
+        } else {
+            message = "Operating area has no routes. All operations are allowed.";
+        }
+
+        return OperatingAreaStatusResponse.builder()
+                .operatingAreaId(operatingAreaId)
+                .operatingAreaName(operatingArea.getName())
+                .hasRoutes(hasRoutes)
+                .routeCount(routeCount)
+                .canDelete(canDelete)
+                .canUpdate(canUpdate)
+                .message(message)
+                .build();
     }
 
     private OperatingAreaResponse mapToResponse(OperatingArea operatingArea) {

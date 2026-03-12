@@ -18,5 +18,9 @@ public interface RouteRepository extends MongoRepository<Route, String> {
     boolean existsByCode(String code);
 
     List<Route> findByType(Route.RouteType type);
+
+    List<Route> findByOperatingAreaId(String operatingAreaId);
+
+    boolean existsByOperatingAreaId(String operatingAreaId);
 }
 

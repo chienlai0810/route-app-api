@@ -181,7 +181,132 @@ Request Body: Same as create
 
 ---
 
-## 2. Route API (Tuyến)
+## 2. Operating Area API (Vùng hoạt động)
+
+### 2.1 Tạo Operating Area
+**POST** `/api/v1/operating-areas`
+
+Request Body:
+```json
+{
+  "name": "Vùng Hoạt Động Hoàn Kiếm",
+  "postOfficeId": "65a1b2c3d4e5f6789abcdef0",
+  "productType": "HH;TH",
+  "area": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [105.8400, 21.0350],
+        [105.8600, 21.0350],
+        [105.8600, 21.0200],
+        [105.8400, 21.0200],
+        [105.8400, 21.0350]
+      ]
+    ]
+  }
+}
+```
+
+Response (201 Created):
+```json
+{
+  "success": true,
+  "message": "Operating area created successfully",
+  "data": {
+    "id": "65a1b2c3d4e5f6789abcdef2",
+    "name": "Vùng Hoạt Động Hoàn Kiếm",
+    "postOfficeId": "65a1b2c3d4e5f6789abcdef0",
+    "postOfficeName": "Bưu cục Hoàn Kiếm",
+    "productType": "HH;TH",
+    "area": { ... },
+    "createdAt": "2024-01-15T10:45:00",
+    "updatedAt": "2024-01-15T10:45:00"
+  }
+}
+```
+
+### 2.2 Lấy tất cả Operating Areas
+**GET** `/api/v1/operating-areas`
+
+Query Parameters:
+- `postOfficeId` (optional): Lọc theo bưu cục
+- `productType` (optional): Lọc theo loại hàng hóa (HH, TH, KH)
+- `operatingAreaId` (optional): Lấy operating area cụ thể
+
+### 2.3 Lấy Operating Area theo ID
+**GET** `/api/v1/operating-areas/{id}`
+
+### 2.4 Cập nhật Operating Area
+**PUT** `/api/v1/operating-areas/{id}`
+
+Request Body: Same as create
+
+### 2.5 Xóa Operating Area
+**DELETE** `/api/v1/operating-areas/{id}`
+
+### 2.6 Kiểm tra trạng thái Operating Area ⭐
+**GET** `/api/v1/operating-areas/{id}/status`
+
+**Mô tả:** API này giúp UI xác định có nên disable nút xóa/cập nhật hay không khi operating area có chứa routes.
+
+Response (200 OK):
+```json
+{
+  "success": true,
+  "data": {
+    "operatingAreaId": "65a1b2c3d4e5f6789abcdef2",
+    "operatingAreaName": "Vùng Hoạt Động Hoàn Kiếm",
+    "hasRoutes": true,
+    "routeCount": 5,
+    "canDelete": false,
+    "canUpdate": true,
+    "message": "Operating area contains 5 route(s). Deletion is not allowed. Please remove all routes before deleting this operating area."
+  }
+}
+```
+
+**Sử dụng trong UI:**
+```javascript
+// Kiểm tra trước khi hiển thị nút
+const response = await fetch(`/api/v1/operating-areas/${id}/status`);
+const { data } = await response.json();
+
+// Disable nút xóa nếu có routes
+deleteButton.disabled = !data.canDelete;
+
+// Hiển thị cảnh báo
+if (!data.canDelete) {
+  showWarning(data.message);
+}
+```
+
+### 2.7 Kiểm tra Operating Area có Routes
+**GET** `/api/v1/operating-areas/{id}/has-routes`
+
+**Mô tả:** Kiểm tra đơn giản xem operating area có chứa routes hay không (trả về boolean).
+
+Response (200 OK):
+```json
+{
+  "success": true,
+  "data": true
+}
+```
+
+### 2.8 Đếm số Routes trong Operating Area
+**GET** `/api/v1/operating-areas/{id}/route-count`
+
+Response (200 OK):
+```json
+{
+  "success": true,
+  "data": 5
+}
+```
+
+---
+
+## 3. Route API (Tuyến)
 
 ### 2.1 Tạo Tuyến
 **POST** `/api/v1/routes`
@@ -278,9 +403,9 @@ Request Body: Same as create
 
 ---
 
-## 3. GIS API (Point-in-Polygon Check)
+## 4. GIS API (Point-in-Polygon Check)
 
-### 3.1 Kiểm tra tọa độ thuộc tuyến nào (POST)
+### 4.1 Kiểm tra tọa độ thuộc tuyến nào (POST)
 **POST** `/api/v1/gis/check-point`
 
 Request Body:
@@ -320,7 +445,7 @@ Response (200 OK):
 }
 ```
 
-### 3.2 Kiểm tra tọa độ thuộc tuyến nào (GET)
+### 4.2 Kiểm tra tọa độ thuộc tuyến nào (GET)
 **GET** `/api/v1/gis/check-point?latitude=21.0275&longitude=105.8525`
 
 Response: Same as POST

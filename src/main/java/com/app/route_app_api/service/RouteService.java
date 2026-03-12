@@ -58,6 +58,9 @@ public class RouteService {
         OperatingArea operatingArea = operatingAreaRepository.findById(request.getOperatingAreaId())
                 .orElseThrow(() -> new ResourceNotFoundException("Operating area not found with id: " + request.getOperatingAreaId()));
 
+        // Validate route product types are within operating area product types
+        validateProductTypes(request.getProductType(), operatingArea);
+
         // Validate route area is within operating area
         validateRouteWithinOperatingArea(request.getArea(), operatingArea);
 
@@ -327,6 +330,9 @@ public class RouteService {
         OperatingArea operatingArea = operatingAreaRepository.findById(request.getOperatingAreaId())
                 .orElseThrow(() -> new ResourceNotFoundException("Operating area not found with id: " + request.getOperatingAreaId()));
 
+        // Validate route product types are within operating area product types
+        validateProductTypes(request.getProductType(), operatingArea);
+
         // Validate route area is within operating area
         validateRouteWithinOperatingArea(request.getArea(), operatingArea);
 
@@ -361,6 +367,53 @@ public class RouteService {
 
         routeRepository.deleteById(id);
         log.info("Deleted route with id: {}", id);
+    }
+
+    /**
+     * Validate that route product types are within operating area product types
+     * Throws BusinessRuleException if route has product types not allowed by operating area
+     */
+    private void validateProductTypes(String routeProductType, OperatingArea operatingArea) {
+        log.debug("Validating route product types against operating area: {}", operatingArea.getName());
+
+        if (routeProductType == null || routeProductType.trim().isEmpty()) {
+            throw new BusinessRuleException("Route product type cannot be empty");
+        }
+
+        if (operatingArea.getProductType() == null || operatingArea.getProductType().trim().isEmpty()) {
+            throw new BusinessRuleException("Operating area has no product types defined");
+        }
+
+        // Parse route product types
+        java.util.Set<String> routeTypes = java.util.Arrays.stream(routeProductType.split(";"))
+                .map(String::trim)
+                .map(String::toUpperCase)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toSet());
+
+        // Parse operating area product types
+        java.util.Set<String> operatingAreaTypes = java.util.Arrays.stream(operatingArea.getProductType().split(";"))
+                .map(String::trim)
+                .map(String::toUpperCase)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toSet());
+
+        log.debug("Route product types: {}", routeTypes);
+        log.debug("Operating area product types: {}", operatingAreaTypes);
+
+        // Check if all route product types are within operating area product types
+        java.util.Set<String> invalidTypes = new java.util.HashSet<>(routeTypes);
+        invalidTypes.removeAll(operatingAreaTypes);
+
+        if (!invalidTypes.isEmpty()) {
+            throw new BusinessRuleException(
+                    String.format("Route has product types %s that are not allowed by operating area '%s'. " +
+                                    "Operating area only allows: %s",
+                            invalidTypes, operatingArea.getName(), operatingAreaTypes)
+            );
+        }
+
+        log.debug("All route product types are valid for operating area");
     }
 
     /**
